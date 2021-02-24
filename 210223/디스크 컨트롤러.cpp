@@ -1,32 +1,44 @@
+#include <string>
 #include <vector>
-#include <iostream>
 #include <queue>
 #include <algorithm>
 
 using namespace std;
-
-struct cmp {
-	bool operator()(vector<int> a, vector<int> b) {
-		return a.at(1) > b.at(1);
+struct cost_cmp {
+	bool operator()(vector<int>& v1, vector<int>& v2)
+	{
+		return v1[1] > v2[1];
+	}
+};
+struct start_cmp {
+	bool operator()(vector<int>& v1, vector<int>& v2)
+	{
+		return v1[0] > v2[0];
 	}
 };
 
 int solution(vector<vector<int>> jobs) {
-	int answer = 0, j = 0, time = 0;
-	sort(jobs.begin(), jobs.end());
-	priority_queue<vector<int>, vector<vector<int>>, cmp> pq;
-	while (j < jobs.size() || !pq.empty()) {
-		if (jobs.size() > j && time >= jobs[j][0]) {
-			pq.push(jobs[j++]);
+	int answer = 0;
+	priority_queue<vector<int>, vector<vector<int>>, cost_cmp> stjf;
+	priority_queue<vector<int>, vector<vector<int>>, start_cmp> sf;
+	for (const auto& job : jobs)
+		sf.push(job);
+	int time = 0;
+	while (!sf.empty() || !stjf.empty()) {
+		if (!sf.empty() && time >= sf.top()[0]) {
+			stjf.push(sf.top());
+			sf.pop();
 			continue;
 		}
-		if (!pq.empty()) {
-			time += pq.top()[1];
-			answer += time - pq.top()[0];
-			pq.pop();
+		if (stjf.size()) {
+			time += stjf.top()[1];
+			answer += time - stjf.top()[0];
+			stjf.pop();
 		}
-		else
-			time = jobs[j][0];
+		else {
+			time = sf.top()[0];
+		}
 	}
-	return answer / jobs.size();
+	answer /= jobs.size();
+	return answer;
 }
