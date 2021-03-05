@@ -31,7 +31,6 @@ string solution(int n, int t, int m, vector<string> timetable) {
 					currtime = 540 + t * (n - 1);
 					break;
 				}
-				// 새로운 버스 오라고 하자
 				start += t; 
 				++currbus;
 				go = 0;
