@@ -147,8 +147,3 @@ vector<vector<int>> solution(int n, vector<vector<int>> build_frame)
     
     return answer;
 }
-Colored by Color Scripter
-cs
-
-좋아요공감
-공유하기글 요소
