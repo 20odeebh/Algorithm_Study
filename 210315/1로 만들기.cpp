@@ -17,7 +17,6 @@ int main(void) {
 		if (i % 3 == 0) {
 			dp[i] = min(dp[i], dp[i / 3] + 1);
 		}
-	}
-	
+	}	
 	cout << dp[n];
 }
