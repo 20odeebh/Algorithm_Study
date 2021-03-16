@@ -6,6 +6,7 @@ int N;
 int field[MAX_SIZE + 1][MAX_SIZE + 1];
 int dp[MAX_SIZE + 1][MAX_SIZE + 1][3];
 //dp[R][C][D] = 파이프가 R, C에서 시작하여 N, N까지 방향 D로 도달하는 경우의 수
+//방향 0, 1, 2 : 세로, 대각선, 가로
 int dfs(int r, int c, int d)
 {
 	if (r > N || c > N)
@@ -17,7 +18,7 @@ int dfs(int r, int c, int d)
 		switch (d) {
 		case 0:
 			if (field[r + 1][c] == 0)
-				dp[r][c][d] += dfs(r + 1, c, d);
+				dp[r][c][d] += dfs(r + 1, c, 0);
 			if (field[r][c + 1] == 0 &&
 				field[r + 1][c + 1] == 0 &&
 				field[r + 1][c] == 0)
