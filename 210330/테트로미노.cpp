@@ -122,8 +122,6 @@ char map[19][4][5] = {
 };
 
 int go(int a, int b, int c) {
-
-
 	int sum = 0;
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 4; j++) {
