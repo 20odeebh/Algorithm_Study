@@ -128,7 +128,6 @@ int go(int a, int b, int c) {
 			if (map[c][i][j] == '1') sum += board[a + i][b + j];
 		}
 	}
-
 	return sum;
 }
 
@@ -150,7 +149,6 @@ int main() {
 			board[i][j] = -10000;
 		}
 	}
-
 
 	for (int c = 0; c < 19; c++) {
 		for (int a = 0; a < n; a++) {
