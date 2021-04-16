@@ -15,15 +15,46 @@ vector<int> v1;
 vector<int> v2;
 
 int solve(){
-    vector<int> t1 = v1;
-    vector<int> t2 = v2;
-    sort(t1.begin(), t1.end());
-    sort(t2.begin(), t2.end());
-    
-    int l1=0,r1=0, l2=0,r2=0, time=0;
-    // 미완
+    vector<int> vv1 = v1;
+    vector<int> vv2 = v2;
+    sort(vv1.begin(), vv1.end());
+    sort(vv2.begin(), vv2.end());
+    // str1, str2 : stair
+    int ci, time=0;
     // 1번 계단 총 시간
+    ci = 0;
+    queue<int> q;
+    for(int t=0; ;t++){
+        while(!q.empty()){
+            int chki = q.front();
+            if(t==vv1[chki]+str1) q.pop();
+            else break;
+        }
+        if(q.empty() && ci==vv1.size()) {time=t; break;}
+        for(; ci<vv1.size(); ci++){
+            if(q.size()<3 && vv1[ci]<=t){
+                vv1[ci] = t;
+                q.push(ci);
+            } else break;
+        }
+    }
+    
     // 2번 계단 총 시간
+    ci = 0;
+    for(int t=0; ;t++){ // 시간
+        while(!q.empty()){
+            int chki = q.front();
+            if(t==vv2[chki]+str2) q.pop();
+            else break;
+        }
+        if(q.empty() && ci==vv2.size()) {time=max(time,t); break;}
+        for(; ci<vv2.size(); ci++){            
+            if(q.size()<3 && vv2[ci]<=t){
+                vv2[ci] = t;
+                q.push(ci);
+            } else break;
+        }
+    }
     
     return time;
 }
