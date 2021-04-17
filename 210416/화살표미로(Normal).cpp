@@ -1,44 +1,33 @@
-// WA
-
 #include<bits/stdc++.h>
 using namespace std;
 const int INF = 0x3f3f3f3f;
 
 struct Info {
-    int y,x,l,r; // y,x,dir,cnt
+    int y,x,l,r;
     Info(int y=0, int x=0, int l=0, int r=0)
     : y(y), x(x), l(l), r(r) {}
 };
 
-struct comp{
-    bool operator()(Info &a, Info &b){
-        return a.l+a.r > b.l+b.r;
-    }
-};
-
-int N,M,K; // 50, 50 ,150
+int N,M,K;
 int m[51][51]{};
 bool vi[51][51][151][151]{};
-int dist[51][51]{};
-int dy[4] = {-1,0,1,0}; // U,R,D,L
+int dy[4] = {-1,0,1,0};
 int dx[4] = {0,1,0,-1};
 
 bool solve(){
-    priority_queue<Info,vector<Info>, comp> pq;
-    pq.push(Info(0,0,0,0));
+    queue<Info> q;
+    q.push(Info(0,0,0,0));
     vi[0][0][0][0] = true;
-    dist[0][0] = 0;
 
-    while(!pq.empty()){
-        int cy = pq.top().y;
-        int cx = pq.top().x;
-        int cl = pq.top().l;
-        int cr = pq.top().r;
-        pq.pop();
+    while(!q.empty()){
+        int cy = q.front().y;
+        int cx = q.front().x;
+        int cl = q.front().l;
+        int cr = q.front().r;
+        q.pop();
 
-        if(dist[cy][cx] < cl+cr) continue;
         if(cy==N-1 && cx==M-1)
-            if(max(cl,cr)<=K) 
+            if(max(cl,cr)<=K)
                 return true;
 
         for(int i=0; i<4; i++){
@@ -46,28 +35,32 @@ bool solve(){
             int nx = cx + dx[i];
             if(ny<0 || nx<0 || ny>=N || nx>=M) continue;
             int cd = m[cy][cx]+4;
-            int nl=cl,nr=cr;
+            int nl1=cl,nr1=cr, nl2=cl,nr2=cr;
             bool chk = false;
-            if(cd%4 == i) nl = cl, nr = cr;
-            else if((cd-1)%4 == i) nl = cl+1, nr = cr;
-            else if((cd+1)%4 == i) nl = cl, nr = cr+1;
-            else if((cd+2)%4 == i) {
-                nl = cl + 2;
-                nr = cr;
+            if(cd%4 == i) {
+                nl1 = cl, nr1 = cr;
                 chk = true;
             }
-            
-            if(dist[ny][nx] >= (nl+nr)){
-                if(max(nl,nr) > K) continue;
-                if(vi[ny][nx][nl][nr]) continue;
-                else vi[ny][nx][nl][nr] = true;
-                dist[ny][nx] = nl+nr;
-                pq.push(Info(ny,nx,nl,nr));
-                if(!chk) continue;
-                nl -=2; nr +=2;
-                if(vi[ny][nx][nl][nr]) continue;
-                else vi[ny][nx][nl][nr] = true;
-                pq.push(Info(ny,nx,nl,nr));
+            else if((cd-1)%4 == i) {
+                nl1 = cl+1, nr1 = cr;
+                nl2 = cl,   nr2 = cr+3;
+            }
+            else if((cd+1)%4 == i) {
+                nl1 = cl,   nr1 = cr+1;
+                nl2 = cl+3, nr2 = cr;
+            }
+            else if((cd+2)%4 == i) {
+                nl1 = cl + 2, nr1 = cr;
+                nl2 = cl,     nr2 = cr+2;
+            }
+            if(max(nl1,nr1) <= K && !vi[ny][nx][nl1][nr1]) {
+                q.push(Info(ny,nx,nl1,nr1));
+                vi[ny][nx][nl1][nr1] = true;
+            }
+            if(chk) continue;
+            if(max(nl2,nr2) <= K && !vi[ny][nx][nl2][nr2]) {
+                q.push(Info(ny,nx,nl2,nr2));
+                vi[ny][nx][nl2][nr2] = true;
             }
         }
     }
@@ -89,7 +82,6 @@ int main() {
             else if(str[j]=='L') m[i][j] = 3;
         }
     }
-    memset(dist,0x3f,sizeof(dist));
     if(solve()) cout<<"Yes";
     else cout<<"No";
 }
