@@ -14,6 +14,8 @@ pii men[11]{};
 vector<int> v1;
 vector<int> v2;
 
+bi
+
 int solve(){
     vector<int> vv1 = v1;
     vector<int> vv2 = v2;
